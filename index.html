@@ -39,7 +39,6 @@
       padding: 0 16px;
     }
 
-    /* TOP BAR */
     .topbar {
       display: flex;
       align-items: center;
@@ -68,7 +67,6 @@
       50% { opacity: 0.4; }
     }
 
-    /* MESSAGES */
     .messages {
       flex: 1;
       overflow-y: auto;
@@ -87,12 +85,7 @@
       padding: 30px 20px 16px;
       animation: fadeUp 0.5s ease both 0.1s;
     }
-    .intro h1 {
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 5px;
-    }
+    .intro h1 { font-size: 1rem; font-weight: 500; color: var(--text); margin-bottom: 5px; }
     .intro p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
 
     .chips {
@@ -114,11 +107,7 @@
       transition: border-color 0.2s, color 0.2s, background 0.2s;
       font-family: 'DM Sans', sans-serif;
     }
-    .chip:hover {
-      border-color: var(--accent);
-      background: var(--accent-dim);
-      color: var(--accent);
-    }
+    .chip:hover { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
 
     .msg-row { display: flex; animation: fadeUp 0.3s ease both; }
     .msg-row.user { justify-content: flex-end; }
@@ -174,7 +163,6 @@
     .product-info .price { color: var(--accent); font-weight: 600; font-size: 0.88rem; }
     .product-info .shop { color: var(--muted); font-size: 0.7rem; margin-top: 2px; }
 
-    /* INPUT */
     .input-area {
       padding: 10px 0 18px;
       flex-shrink: 0;
@@ -218,12 +206,7 @@
     .send-btn:hover { opacity: 0.85; transform: scale(0.95); }
     .send-btn svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-    .footer-note {
-      text-align: center;
-      font-size: 0.68rem;
-      color: #444;
-      margin-top: 8px;
-    }
+    .footer-note { text-align: center; font-size: 0.68rem; color: #444; margin-top: 8px; }
     .footer-note a { color: #444; text-decoration: underline; }
 
     @keyframes fadeUp {
@@ -282,29 +265,8 @@
   const messagesEl = document.getElementById('messages');
   const inputEl    = document.getElementById('input');
 
-  const N8N_WEBHOOK_URL = 'const N8N_WEBHOOK_URL = 'https://joel12.app.n8n.cloud/webhook-test/chat';
-
-  async function respond(text) {
-    showTyping();
-    try {
-      const res = await fetch(N8N_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
-      });
-      if (!res.ok) throw new Error('Fehler');
-      const data = await res.json();
-      removeTyping();
-      if (data.product) {
-        addBotResponse(data);
-      } else {
-        addMessage(data.text || 'Keine Antwort erhalten.', 'bot');
-      }
-    } catch (err) {
-      removeTyping();
-      addMessage('Verbindungsfehler. Bitte versuche es erneut.', 'bot');
-    }
-  }';
+  // n8n Webhook URL
+  const N8N_WEBHOOK_URL = 'https://joel12.app.n8n.cloud/webhook-test/chat';
 
   function autoResize(el) {
     el.style.height = 'auto';
