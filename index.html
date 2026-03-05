@@ -284,17 +284,6 @@
   const messagesEl = document.getElementById('messages');
   const inputEl    = document.getElementById('input');
 
-  const responses = {
-    default: [
-      "Gute Frage! Kannst du mir etwas mehr dazu sagen – z.B. für welches Projekt oder welches Budget?",
-      "Ich helfe dir gerne. Möchtest du das Produkt online bestellen oder lieber in einer Filiale abholen?"
-    ],
-    bohr:    { text: "Für gelegentliches Bohren empfehle ich dir:", product: { icon:"🔩", name:"Bosch EasyDrill 18V-40", price:"79,99 €", shop:"Bei OBI ansehen →" } },
-    filiale: { text: "Die nächste OBI-Filiale findest du am schnellsten über die OBI-Filialsuche. Soll ich dir den Link schicken, oder suchst du eine bestimmte Stadt?" },
-    garten:  { text: "Im März kannst du bereits Tomaten & Paprika auf der Fensterbank vorziehen 🌱 Jetzt ist auch die beste Zeit für Rasendünger. Soll ich passende Produkte zeigen?" },
-    bad:     { text: "Für eine Badrenovierung brauchst du grob:\n\n• Fliesenkleber & Fugenmasse\n• Schlagbohrmaschine + Fliesenbohrer\n• Grundierung & Dichtband\n• Silikonmasse\n\nSoll ich konkrete Produkte mit Preisen zusammenstellen?" }
-  };
-
   function autoResize(el) {
     el.style.height = 'auto';
     el.style.height = Math.min(el.scrollHeight, 120) + 'px';
