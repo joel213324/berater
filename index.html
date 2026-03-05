@@ -68,7 +68,6 @@
       50% { opacity: 0.4; }
     }
 
-
     /* MESSAGES */
     .messages {
       flex: 1;
@@ -237,7 +236,6 @@
     }
 
     @media (max-width: 480px) {
-      .badge:last-child { display: none; }
       .bubble { max-width: 88%; }
       .bot-wrap { max-width: 88%; }
     }
@@ -260,7 +258,7 @@
     </div>
     <div class="chips" id="chips">
       <button class="chip" onclick="sendChip(this)">🔨 Bohrmaschine empfehlen</button>
-      <button class="chip" onclick="sendChip(this)">📍 Nächste Filiale</button>
+      <button class="chip" onclick="sendChip(this)">📍 Nächste Filiale finden</button>
       <button class="chip" onclick="sendChip(this)">🌱 Gartentipps für März</button>
       <button class="chip" onclick="sendChip(this)">🪣 Bad renovieren</button>
     </div>
@@ -284,19 +282,46 @@
   const messagesEl = document.getElementById('messages');
   const inputEl    = document.getElementById('input');
 
+  const N8N_WEBHOOK_URL = 'const N8N_WEBHOOK_URL = 'https://joel12.app.n8n.cloud/webhook-test/chat';
+
+  async function respond(text) {
+    showTyping();
+    try {
+      const res = await fetch(N8N_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+      if (!res.ok) throw new Error('Fehler');
+      const data = await res.json();
+      removeTyping();
+      if (data.product) {
+        addBotResponse(data);
+      } else {
+        addMessage(data.text || 'Keine Antwort erhalten.', 'bot');
+      }
+    } catch (err) {
+      removeTyping();
+      addMessage('Verbindungsfehler. Bitte versuche es erneut.', 'bot');
+    }
+  }';
+
   function autoResize(el) {
     el.style.height = 'auto';
     el.style.height = Math.min(el.scrollHeight, 120) + 'px';
   }
+
   function handleKey(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
   }
+
   function sendChip(btn) {
     hideChips();
     const text = btn.textContent.replace(/^\S+\s/, '');
     addMessage(text, 'user');
     respond(text);
   }
+
   function send() {
     const text = inputEl.value.trim();
     if (!text) return;
@@ -306,22 +331,35 @@
     addMessage(text, 'user');
     respond(text);
   }
+
   function hideChips() {
     const c = document.getElementById('chips');
     if (c) c.style.display = 'none';
   }
-  function respond(text) {
+
+  async function respond(text) {
     showTyping();
-    setTimeout(() => {
+    try {
+      const res = await fetch(N8N_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+      if (!res.ok) throw new Error('Serverfehler');
+      const data = await res.json();
       removeTyping();
-      const l = text.toLowerCase();
-      if (l.includes('bohr') || l.includes('schraub')) addBotResponse(responses.bohr);
-      else if (l.includes('filiale') || l.includes('öffnung') || l.includes('laden')) addBotResponse(responses.filiale);
-      else if (l.includes('garten') || l.includes('pflanz')) addBotResponse(responses.garten);
-      else if (l.includes('bad') || l.includes('fliese') || l.includes('renovier')) addBotResponse(responses.bad);
-      else addMessage(responses.default[Math.floor(Math.random()*responses.default.length)], 'bot');
-    }, 900 + Math.random()*500);
+      if (data.product) {
+        addBotResponse(data);
+      } else {
+        addMessage(data.text || data.response || 'Keine Antwort erhalten.', 'bot');
+      }
+    } catch (err) {
+      removeTyping();
+      addMessage('Verbindungsfehler. Bitte versuche es erneut.', 'bot');
+      console.error(err);
+    }
   }
+
   function addMessage(text, role) {
     const row = document.createElement('div');
     row.className = `msg-row ${role}`;
@@ -332,6 +370,7 @@
     messagesEl.appendChild(row);
     scrollBottom();
   }
+
   function addBotResponse(data) {
     const row  = document.createElement('div');
     row.className = 'msg-row bot';
@@ -344,13 +383,21 @@
     if (data.product) {
       const card = document.createElement('div');
       card.className = 'product-card';
-      card.innerHTML = `<div class="product-thumb">${data.product.icon}</div><div class="product-info"><strong>${data.product.name}</strong><span class="price">${data.product.price}</span><span class="shop">${data.product.shop}</span></div>`;
+      if (data.product.url) card.onclick = () => window.open(data.product.url, '_blank');
+      card.innerHTML = `
+        <div class="product-thumb">${data.product.icon || '🛒'}</div>
+        <div class="product-info">
+          <strong>${data.product.name}</strong>
+          <span class="price">${data.product.price}</span>
+          <span class="shop">${data.product.shop || 'Jetzt ansehen →'}</span>
+        </div>`;
       wrap.appendChild(card);
     }
     row.appendChild(wrap);
     messagesEl.appendChild(row);
     scrollBottom();
   }
+
   function showTyping() {
     const row = document.createElement('div');
     row.className = 'msg-row bot typing';
@@ -359,10 +406,12 @@
     messagesEl.appendChild(row);
     scrollBottom();
   }
+
   function removeTyping() {
     const el = document.getElementById('typing');
     if (el) el.remove();
   }
+
   function scrollBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
 </script>
 </body>
