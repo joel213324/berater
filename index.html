@@ -3,663 +3,378 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OBI Berater – Dein KI-Assistent für Heimwerken & Garten</title>
-  <meta name="description" content="Kostenloser KI-Einkaufsberater für OBI. Produktempfehlungen, Filialinfos und Heimwerker-Tipps – alles in einem Chat." />
+  <title>Produktberater</title>
+  <meta name="description" content="KI-gestützter Produktberater – kostenlos, sofort." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --obi: #ff6600;
-      --obi-dark: #d45000;
-      --obi-light: #fff3eb;
-      --ink: #1a1a1a;
-      --mid: #555;
-      --line: #e8e8e8;
-      --white: #ffffff;
-      --bg: #fafaf8;
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --surface2: #222;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #666;
+      --accent: #ff6600;
+      --accent-dim: rgba(255,102,0,0.12);
+      --green: #22c55e;
     }
 
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Barlow', sans-serif;
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
       background: var(--bg);
-      color: var(--ink);
-      overflow-x: hidden;
-    }
-
-    /* ─── NAV ─── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 2px solid var(--obi);
-      padding: 0 5%;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px;
-    }
-    .nav-logo {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.5rem; font-weight: 900;
-      letter-spacing: -0.02em;
-      color: var(--ink);
-    }
-    .nav-logo span { color: var(--obi); }
-    .nav-cta {
-      background: var(--obi); color: #fff;
-      border: none; cursor: pointer;
-      padding: 9px 22px; border-radius: 4px;
-      font-family: 'Barlow', sans-serif;
-      font-weight: 600; font-size: 0.9rem;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    .nav-cta:hover { background: var(--obi-dark); }
-
-    /* ─── HERO ─── */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      gap: 0;
-      padding-top: 64px;
-    }
-    .hero-left {
-      padding: 80px 5% 80px 8%;
-    }
-    .hero-tag {
-      display: inline-block;
-      background: var(--obi-light);
-      color: var(--obi);
-      font-weight: 700; font-size: 0.78rem;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 6px 14px; border-radius: 2px;
-      margin-bottom: 28px;
-    }
-    .hero h1 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: clamp(2.8rem, 5vw, 4.8rem);
-      font-weight: 900;
-      line-height: 0.95;
-      letter-spacing: -0.02em;
-      margin-bottom: 24px;
-    }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--obi);
-    }
-    .hero-sub {
-      font-size: 1.15rem; color: var(--mid);
-      line-height: 1.6; max-width: 480px;
-      margin-bottom: 40px;
-    }
-    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
-    .btn-primary {
-      background: var(--obi); color: #fff;
-      padding: 14px 32px; border-radius: 4px;
-      font-weight: 700; font-size: 1rem;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s;
-      display: inline-block;
-    }
-    .btn-primary:hover { background: var(--obi-dark); transform: translateY(-1px); }
-    .btn-secondary {
-      background: transparent; color: var(--ink);
-      padding: 14px 32px; border-radius: 4px;
-      border: 2px solid var(--line);
-      font-weight: 600; font-size: 1rem;
-      text-decoration: none;
-      transition: border-color 0.2s;
-      display: inline-block;
-    }
-    .btn-secondary:hover { border-color: var(--obi); color: var(--obi); }
-
-    /* ─── HERO CHAT MOCKUP ─── */
-    .hero-right {
-      background: var(--ink);
-      min-height: calc(100vh - 64px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 60px 6%;
-      position: relative;
+      color: var(--text);
       overflow: hidden;
     }
-    .hero-right::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 30% 50%, rgba(255,102,0,0.15) 0%, transparent 60%);
-    }
-    .chat-window {
-      background: #242424;
-      border-radius: 16px;
-      width: 100%; max-width: 400px;
-      overflow: hidden;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-      position: relative;
-      animation: floatUp 0.8s ease both;
-    }
-    @keyframes floatUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .chat-header {
-      background: var(--obi);
-      padding: 16px 20px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .chat-avatar {
-      width: 38px; height: 38px; border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem;
-    }
-    .chat-header-info strong { display: block; color: #fff; font-size: 0.95rem; }
-    .chat-header-info span { color: rgba(255,255,255,0.8); font-size: 0.78rem; }
-    .online-dot {
-      display: inline-block; width: 7px; height: 7px;
-      background: #4ade80; border-radius: 50; margin-right: 5px;
-    }
-    .chat-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; min-height: 320px; }
-    .msg {
-      max-width: 88%;
-      padding: 11px 15px;
-      border-radius: 12px;
-      font-size: 0.88rem; line-height: 1.5;
-      animation: msgIn 0.3s ease both;
-    }
-    @keyframes msgIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .msg-bot { background: #333; color: #f0f0f0; align-self: flex-start; border-bottom-left-radius: 3px; }
-    .msg-user { background: var(--obi); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
-    .msg-product {
-      background: #2d2d2d; border: 1px solid #3a3a3a;
-      border-radius: 10px; padding: 14px;
-      display: flex; gap: 12px; align-items: center;
-      align-self: flex-start; max-width: 92%;
-    }
-    .product-icon {
-      width: 44px; height: 44px; border-radius: 8px;
-      background: linear-gradient(135deg, #ff6600, #ff9900);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem; flex-shrink: 0;
-    }
-    .product-info strong { display: block; color: #f0f0f0; font-size: 0.85rem; margin-bottom: 3px; }
-    .product-info .price { color: var(--obi); font-weight: 700; font-size: 0.95rem; }
-    .product-info .link { color: #888; font-size: 0.75rem; margin-top: 2px; display: block; }
-    .chat-input-bar {
-      padding: 14px 16px;
-      border-top: 1px solid #333;
-      display: flex; gap: 10px; align-items: center;
-    }
-    .chat-input-bar input {
-      flex: 1; background: #333; border: none; border-radius: 20px;
-      padding: 10px 16px; color: #ccc; font-size: 0.85rem;
-      outline: none; font-family: 'Barlow', sans-serif;
-    }
-    .chat-send {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--obi); border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 1rem;
-    }
-    .msg-1 { animation-delay: 0.2s; }
-    .msg-2 { animation-delay: 0.6s; }
-    .msg-3 { animation-delay: 1.0s; }
-    .msg-4 { animation-delay: 1.4s; }
 
-    /* ─── STATS ─── */
-    .stats {
-      background: var(--obi);
-      padding: 50px 8%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
+    .app {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 16px;
     }
-    .stat {
-      text-align: center;
-      padding: 20px;
-      border-right: 1px solid rgba(255,255,255,0.25);
-    }
-    .stat:last-child { border-right: none; }
-    .stat-num {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 3.5rem; font-weight: 900;
-      color: #fff; line-height: 1;
-    }
-    .stat-label { color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-top: 6px; }
 
-    /* ─── FEATURES ─── */
-    .features {
-      padding: 100px 8%;
-    }
-    .section-label {
-      font-size: 0.78rem; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--obi); margin-bottom: 16px;
-    }
-    .section-title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 900; line-height: 1.05;
-      margin-bottom: 60px; max-width: 600px;
-    }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      background: var(--line);
-    }
-    .feature-card {
-      background: var(--white);
-      padding: 44px 36px;
-      transition: background 0.2s;
-    }
-    .feature-card:hover { background: var(--obi-light); }
-    .feature-icon {
-      font-size: 2.4rem; margin-bottom: 20px;
-    }
-    .feature-card h3 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.4rem; font-weight: 700;
-      margin-bottom: 12px;
-    }
-    .feature-card p { color: var(--mid); font-size: 0.95rem; line-height: 1.6; }
-
-    /* ─── HOW IT WORKS ─── */
-    .how {
-      background: var(--ink);
-      color: #fff;
-      padding: 100px 8%;
-    }
-    .how .section-title { color: #fff; }
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 40px;
-      margin-top: 60px;
-    }
-    .step-num {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 4rem; font-weight: 900;
-      color: var(--obi); opacity: 0.5;
-      line-height: 1; margin-bottom: 16px;
-    }
-    .step h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
-    .step p { color: #888; font-size: 0.9rem; line-height: 1.6; }
-
-    /* ─── USE CASES ─── */
-    .usecases {
-      padding: 100px 8%;
-    }
-    .usecase-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      background: var(--line);
-      margin-top: 50px;
-    }
-    .usecase-card {
-      background: var(--white);
-      padding: 44px;
-    }
-    .usecase-card.featured { background: var(--obi); color: #fff; }
-    .usecase-card.featured p { color: rgba(255,255,255,0.85); }
-    .usecase-tag {
-      display: inline-block;
-      background: var(--obi-light); color: var(--obi);
-      font-size: 0.72rem; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 4px 10px; border-radius: 2px;
-      margin-bottom: 16px;
-    }
-    .usecase-card.featured .usecase-tag {
-      background: rgba(255,255,255,0.25); color: #fff;
-    }
-    .usecase-card h3 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.6rem; font-weight: 700;
-      margin-bottom: 12px;
-    }
-    .usecase-card p { color: var(--mid); font-size: 0.95rem; line-height: 1.6; }
-
-    /* ─── ABOUT / IMPRESSUM TEASER ─── */
-    .about {
-      background: #f0f0ed;
-      padding: 80px 8%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-    }
-    .about h2 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 2.4rem; font-weight: 900;
-      margin-bottom: 20px;
-    }
-    .about p { color: var(--mid); line-height: 1.7; margin-bottom: 16px; }
-    .about-badge {
-      background: var(--white);
-      border-left: 4px solid var(--obi);
-      padding: 20px 24px;
-      border-radius: 0 8px 8px 0;
-      margin-top: 30px;
-    }
-    .about-badge strong { display: block; font-size: 1rem; margin-bottom: 4px; }
-    .about-badge span { color: var(--mid); font-size: 0.88rem; }
-    .partner-logos {
-      display: flex; flex-direction: column; gap: 20px;
-    }
-    .partner-card {
-      background: var(--white);
-      padding: 24px 28px;
-      border-radius: 8px;
-      display: flex; align-items: center; gap: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-    .partner-icon { font-size: 2rem; }
-    .partner-card strong { display: block; font-size: 0.95rem; }
-    .partner-card span { color: var(--mid); font-size: 0.82rem; }
-
-    /* ─── CTA STRIP ─── */
-    .cta-strip {
-      background: var(--obi);
-      padding: 80px 8%;
-      text-align: center;
-    }
-    .cta-strip h2 {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      font-weight: 900; color: #fff;
-      margin-bottom: 16px;
-    }
-    .cta-strip p { color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-bottom: 36px; }
-    .btn-white {
-      background: #fff; color: var(--obi);
-      padding: 14px 36px; border-radius: 4px;
-      font-weight: 700; font-size: 1rem;
-      text-decoration: none; display: inline-block;
-      transition: transform 0.15s;
-    }
-    .btn-white:hover { transform: translateY(-2px); }
-
-    /* ─── FOOTER ─── */
-    footer {
-      background: #111;
-      padding: 48px 8%;
+    /* TOP BAR */
+    .topbar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
+      justify-content: center;
+      padding: 16px 0 12px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      animation: fadeDown 0.4s ease both;
     }
-    .footer-logo {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 1.4rem; font-weight: 900;
-      color: #fff;
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
     }
-    .footer-logo span { color: var(--obi); }
-    .footer-links { display: flex; gap: 28px; }
-    .footer-links a { color: #888; text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--obi); }
-    footer p { color: #555; font-size: 0.82rem; }
-    .disclaimer {
-      background: #0d0d0d; padding: 16px 8%;
-      text-align: center;
-      color: #444; font-size: 0.78rem; line-height: 1.6;
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
     }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
-      .hero-right { min-height: 500px; padding: 50px 5%; }
-      .stats { grid-template-columns: repeat(3, 1fr); }
-      .features-grid { grid-template-columns: 1fr; }
-      .steps { grid-template-columns: 1fr 1fr; }
-      .usecase-grid { grid-template-columns: 1fr; }
-      .about { grid-template-columns: 1fr; gap: 40px; }
+
+    /* MESSAGES */
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
     }
-    @media (max-width: 600px) {
-      .stats { grid-template-columns: 1fr; }
-      .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); }
-      .steps { grid-template-columns: 1fr; }
-      nav { padding: 0 4%; }
+    .messages::-webkit-scrollbar { width: 3px; }
+    .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .intro {
+      text-align: center;
+      padding: 30px 20px 16px;
+      animation: fadeUp 0.5s ease both 0.1s;
+    }
+    .intro h1 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+    .intro p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: center;
+      padding: 0 8px;
+      animation: fadeUp 0.5s ease both 0.2s;
+    }
+    .chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: #bbb;
+      font-size: 0.77rem;
+      padding: 6px 13px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .chip:hover {
+      border-color: var(--accent);
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    .msg-row { display: flex; animation: fadeUp 0.3s ease both; }
+    .msg-row.user { justify-content: flex-end; }
+    .msg-row.bot  { justify-content: flex-start; }
+
+    .bubble {
+      max-width: 78%;
+      padding: 10px 15px;
+      border-radius: 16px;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .bot  .bubble { background: var(--surface); color: var(--text); border-bottom-left-radius: 4px; }
+    .user .bubble { background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+
+    .typing .bubble { padding: 13px 16px; }
+    .typing-dots { display: flex; gap: 5px; align-items: center; }
+    .typing-dots span {
+      width: 6px; height: 6px;
+      background: var(--muted);
+      border-radius: 50%;
+      animation: bounce 1.2s ease infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-5px); }
+    }
+
+    .bot-wrap { max-width: 78%; display: flex; flex-direction: column; gap: 8px; }
+    .product-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .product-card:hover { border-color: var(--accent); }
+    .product-thumb {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, #ff6600, #ff9900);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .product-info strong { display: block; font-size: 0.83rem; font-weight: 500; margin-bottom: 2px; }
+    .product-info .price { color: var(--accent); font-weight: 600; font-size: 0.88rem; }
+    .product-info .shop { color: var(--muted); font-size: 0.7rem; margin-top: 2px; }
+
+    /* INPUT */
+    .input-area {
+      padding: 10px 0 18px;
+      flex-shrink: 0;
+      animation: fadeUp 0.4s ease both 0.3s;
+    }
+    .input-wrap {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 10px 10px 18px;
+      transition: border-color 0.2s;
+    }
+    .input-wrap:focus-within { border-color: rgba(255,102,0,0.5); }
+    textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      resize: none;
+      line-height: 1.5;
+      max-height: 120px;
+      min-height: 24px;
+    }
+    textarea::placeholder { color: var(--muted); }
+    .send-btn {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .send-btn:hover { opacity: 0.85; transform: scale(0.95); }
+    .send-btn svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.68rem;
+      color: #444;
+      margin-top: 8px;
+    }
+    .footer-note a { color: #444; text-decoration: underline; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .badge:last-child { display: none; }
+      .bubble { max-width: 88%; }
+      .bot-wrap { max-width: 88%; }
     }
   </style>
 </head>
 <body>
+<div class="app">
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">OBI<span>Berater</span>.de</div>
-  <a href="#chatbot" class="nav-cta">Jetzt testen →</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-tag">✦ KI-gestützter Einkaufsberater</div>
-    <h1>Heimwerken<br/>leicht<br/><em>gemacht.</em></h1>
-    <p class="hero-sub">
-      Der smarte KI-Assistent für OBI-Kunden. Produktempfehlungen, Preisvergleiche und Filialinfos – alles in einem natürlichen Gespräch.
-    </p>
-    <div class="hero-btns">
-      <a href="#chatbot" class="btn-primary">Chat starten →</a>
-      <a href="#features" class="btn-secondary">Mehr erfahren</a>
+  <div class="topbar">
+    <div class="status">
+      <div class="dot"></div>
+      <span>Produktberater</span>
     </div>
   </div>
-  <div class="hero-right">
-    <div class="chat-window">
-      <div class="chat-header">
-        <div class="chat-avatar">🔨</div>
-        <div class="chat-header-info">
-          <strong>OBI Berater</strong>
-          <span><span class="online-dot"></span>Online – antwortet sofort</span>
-        </div>
-      </div>
-      <div class="chat-body">
-        <div class="msg msg-bot msg-1">
-          Hallo! Ich bin dein OBI-Berater 👋 Womit kann ich dir heute helfen?
-        </div>
-        <div class="msg msg-user msg-2">
-          Ich brauche eine Bohrmaschine für Fliesen, Budget ~80€
-        </div>
-        <div class="msg msg-bot msg-3">
-          Perfekt! Für Fliesen empfehle ich dir diese Option:
-        </div>
-        <div class="msg-product msg-4">
-          <div class="product-icon">🔩</div>
-          <div class="product-info">
-            <strong>Bosch EasyDrill 18V-40</strong>
-            <span class="price">79,99 €</span>
-            <span class="link">↗ Jetzt bei OBI ansehen</span>
-          </div>
-        </div>
-      </div>
-      <div class="chat-input-bar">
-        <input type="text" placeholder="Frag mich etwas…" readonly />
-        <button class="chat-send">➤</button>
-      </div>
+
+  <div class="messages" id="messages">
+    <div class="intro">
+      <h1>Wie kann ich dir helfen?</h1>
+      <p>Frag mich nach Produkten, Preisen oder Filialen in deiner Nähe.</p>
+    </div>
+    <div class="chips" id="chips">
+      <button class="chip" onclick="sendChip(this)">🔨 Bohrmaschine empfehlen</button>
+      <button class="chip" onclick="sendChip(this)">📍 Nächste OBI-Filiale</button>
+      <button class="chip" onclick="sendChip(this)">🌱 Gartentipps für März</button>
+      <button class="chip" onclick="sendChip(this)">🪣 Bad renovieren</button>
     </div>
   </div>
-</section>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="stat">
-    <div class="stat-num">50K+</div>
-    <div class="stat-label">OBI-Produkte durchsuchbar</div>
+  <div class="input-area">
+    <div class="input-wrap">
+      <textarea id="input" placeholder="Stell deine Frage…" rows="1"
+        onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" onclick="send()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="footer-note">
+      Keine Anmeldung · <a href="#" onclick="return false">Affiliate-Hinweis</a>
+    </div>
   </div>
-  <div class="stat">
-    <div class="stat-num">600+</div>
-    <div class="stat-label">OBI-Filialen in Deutschland</div>
-  </div>
-  <div class="stat">
-    <div class="stat-num">&lt; 2s</div>
-    <div class="stat-label">Antwortzeit des Chatbots</div>
-  </div>
+
 </div>
+<script>
+  const messagesEl = document.getElementById('messages');
+  const inputEl    = document.getElementById('input');
 
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="section-label">Was der Berater kann</div>
-  <h2 class="section-title">Alle Infos. Sofort. Ohne Suchen.</h2>
-  <div class="features-grid">
-    <div class="feature-card">
-      <div class="feature-icon">🎯</div>
-      <h3>Smarte Produktberatung</h3>
-      <p>Beschreibe dein Projekt – der KI-Berater findet das passende Werkzeug, Material oder Zubehör aus dem gesamten OBI-Sortiment.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📍</div>
-      <h3>Filial- & Öffnungszeiten</h3>
-      <p>Welche OBI-Filiale hat heute auf? Ist ein Produkt vor Ort verfügbar? Alle Infos ohne Website-Suche, direkt im Chat.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🛒</div>
-      <h3>Direkt zum Produkt</h3>
-      <p>Jede Empfehlung enthält einen direkten Link zum OBI Online-Shop – mit aktuellem Preis und Verfügbarkeit.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🔧</div>
-      <h3>Schritt-für-Schritt Anleitungen</h3>
-      <p>Von der Wandmontage bis zum Fußbodenbelag – der Berater erklärt auch, wie das Projekt gelingt.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">💡</div>
-      <h3>Budgetoptimierung</h3>
-      <p>Nenn dein Budget und erhalte die beste Auswahl. Der Berater vergleicht Produkte und empfiehlt das beste Preis-Leistungs-Verhältnis.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🌱</div>
-      <h3>Gartenplanung & Saison-Tipps</h3>
-      <p>Welche Pflanzen passen jetzt? Welches Gartenwerkzeug ist sinnvoll? Der Berater kennt das saisonale Sortiment.</p>
-    </div>
-  </div>
-</section>
+  const responses = {
+    default: [
+      "Gute Frage! Kannst du mir etwas mehr dazu sagen – z.B. für welches Projekt oder welches Budget?",
+      "Ich helfe dir gerne. Möchtest du das Produkt online bestellen oder lieber in einer Filiale abholen?"
+    ],
+    bohr:    { text: "Für gelegentliches Bohren empfehle ich dir:", product: { icon:"🔩", name:"Bosch EasyDrill 18V-40", price:"79,99 €", shop:"Bei OBI ansehen →" } },
+    filiale: { text: "Die nächste OBI-Filiale findest du am schnellsten über die OBI-Filialsuche. Soll ich dir den Link schicken, oder suchst du eine bestimmte Stadt?" },
+    garten:  { text: "Im März kannst du bereits Tomaten & Paprika auf der Fensterbank vorziehen 🌱 Jetzt ist auch die beste Zeit für Rasendünger. Soll ich passende Produkte zeigen?" },
+    bad:     { text: "Für eine Badrenovierung brauchst du grob:\n\n• Fliesenkleber & Fugenmasse\n• Schlagbohrmaschine + Fliesenbohrer\n• Grundierung & Dichtband\n• Silikonmasse\n\nSoll ich konkrete Produkte mit Preisen zusammenstellen?" }
+  };
 
-<!-- HOW IT WORKS -->
-<section class="how">
-  <div class="section-label">So funktioniert es</div>
-  <h2 class="section-title">Von der Frage zur Lösung in Sekunden.</h2>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <h4>Frage stellen</h4>
-      <p>Beschreibe dein Vorhaben in normaler Sprache – kein Fachjargon nötig.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <h4>KI analysiert</h4>
-      <p>Der Assistent durchsucht das OBI-Sortiment und findet die besten Optionen für dich.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">03</div>
-      <h4>Empfehlung erhalten</h4>
-      <p>Du bekommst konkrete Produktvorschläge mit Preisen und Links – kein Scrollen mehr.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">04</div>
-      <h4>Direkt kaufen</h4>
-      <p>Ein Klick führt dich zum OBI Shop oder direkt zur nächsten Filiale.</p>
-    </div>
-  </div>
-</section>
-
-<!-- USE CASES -->
-<section class="usecases" id="chatbot">
-  <div class="section-label">Anwendungsfälle</div>
-  <h2 class="section-title">Was kann ich dich fragen?</h2>
-  <div class="usecase-grid">
-    <div class="usecase-card featured">
-      <div class="usecase-tag">Beliebt</div>
-      <h3>„Ich möchte mein Badezimmer neu fliesen. Was brauche ich alles?"</h3>
-      <p>Der Berater erstellt eine vollständige Materialliste – von der Fliesenkleber-Menge bis zur richtigen Fugenmasse.</p>
-    </div>
-    <div class="usecase-card">
-      <div class="usecase-tag">Werkzeug</div>
-      <h3>„Welcher Akkuschrauber lohnt sich für Gelegenheitsbastler bis 60€?"</h3>
-      <p>Konkrete Empfehlung aus dem OBI-Sortiment mit Begründung, Alternativen und Link zum Produkt.</p>
-    </div>
-    <div class="usecase-card">
-      <div class="usecase-tag">Filialinfo</div>
-      <h3>„Welches OBI in Hamburg hat am Sonntag geöffnet?"</h3>
-      <p>Aktuelle Öffnungszeiten aller OBI-Filialen in deiner Stadt – täglich aktualisiert.</p>
-    </div>
-    <div class="usecase-card">
-      <div class="usecase-tag">Garten</div>
-      <h3>„Was sollte ich im März im Garten pflanzen?"</h3>
-      <p>Saisonale Gartentipps mit passenden Produktempfehlungen aus dem OBI Gartencenter.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section class="about" id="about">
-  <div>
-    <div class="section-label">Über dieses Projekt</div>
-    <h2>Redaktionelles Werkzeug für OBI-Kunden.</h2>
-    <p>
-      OBIBerater.de ist ein unabhängiges, redaktionell betriebenes Vergleichs- und Beratungsportal rund um Heimwerken, Renovierung und Garten. Unser KI-gestützter Assistent hilft Nutzern, die passenden Produkte zu finden und fundierte Kaufentscheidungen zu treffen.
-    </p>
-    <p>
-      Die Produktdaten und -links werden über das Awin Affiliate-Netzwerk bereitgestellt. Wir kennzeichnen alle Affiliate-Inhalte transparent als solche.
-    </p>
-    <div class="about-badge">
-      <strong>Affiliate-Partnerschaft</strong>
-      <span>Dieses Portal nutzt Affiliate-Links von OBI über das Awin-Netzwerk. Bei einem Kauf über unsere Links erhalten wir eine kleine Provision – für dich entstehen keine Mehrkosten.</span>
-    </div>
-  </div>
-  <div class="partner-logos">
-    <div class="partner-card">
-      <div class="partner-icon">🔗</div>
-      <div>
-        <strong>Awin Affiliate-Netzwerk</strong>
-        <span>Offizielle Produktdaten & Affiliate-Links</span>
-      </div>
-    </div>
-    <div class="partner-card">
-      <div class="partner-icon">🏪</div>
-      <div>
-        <strong>OBI Deutschland</strong>
-        <span>600+ Filialen, 50.000+ Produkte</span>
-      </div>
-    </div>
-    <div class="partner-card">
-      <div class="partner-icon">🤖</div>
-      <div>
-        <strong>Claude AI (Anthropic)</strong>
-        <span>KI-Kern für intelligente Produktberatung</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA STRIP -->
-<section class="cta-strip">
-  <h2>Bereit für smarte Einkaufsberatung?</h2>
-  <p>Stell deine erste Frage – kostenlos, ohne Anmeldung.</p>
-  <a href="#chatbot" class="btn-white">Jetzt Chat öffnen →</a>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">OBI<span>Berater</span>.de</div>
-  <div class="footer-links">
-    <a href="#impressum">Impressum</a>
-    <a href="#datenschutz">Datenschutz</a>
-    <a href="#affiliate">Affiliate-Hinweis</a>
-    <a href="#kontakt">Kontakt</a>
-  </div>
-  <p>© 2025 OBIBerater.de – Unabhängiges Beratungsportal</p>
-</footer>
-<div class="disclaimer">
-  * Dies ist ein unabhängiges Beratungsportal ohne direkte Verbindung zur OBI Group. Alle Produktnamen und Marken sind Eigentum ihrer jeweiligen Inhaber. Affiliate-Links sind entsprechend gekennzeichnet.
-</div>
-
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+  }
+  function sendChip(btn) {
+    hideChips();
+    const text = btn.textContent.replace(/^\S+\s/, '');
+    addMessage(text, 'user');
+    respond(text);
+  }
+  function send() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    hideChips();
+    inputEl.value = '';
+    inputEl.style.height = 'auto';
+    addMessage(text, 'user');
+    respond(text);
+  }
+  function hideChips() {
+    const c = document.getElementById('chips');
+    if (c) c.style.display = 'none';
+  }
+  function respond(text) {
+    showTyping();
+    setTimeout(() => {
+      removeTyping();
+      const l = text.toLowerCase();
+      if (l.includes('bohr') || l.includes('schraub')) addBotResponse(responses.bohr);
+      else if (l.includes('filiale') || l.includes('öffnung') || l.includes('laden')) addBotResponse(responses.filiale);
+      else if (l.includes('garten') || l.includes('pflanz')) addBotResponse(responses.garten);
+      else if (l.includes('bad') || l.includes('fliese') || l.includes('renovier')) addBotResponse(responses.bad);
+      else addMessage(responses.default[Math.floor(Math.random()*responses.default.length)], 'bot');
+    }, 900 + Math.random()*500);
+  }
+  function addMessage(text, role) {
+    const row = document.createElement('div');
+    row.className = `msg-row ${role}`;
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    b.textContent = text;
+    row.appendChild(b);
+    messagesEl.appendChild(row);
+    scrollBottom();
+  }
+  function addBotResponse(data) {
+    const row  = document.createElement('div');
+    row.className = 'msg-row bot';
+    const wrap = document.createElement('div');
+    wrap.className = 'bot-wrap';
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    b.textContent = data.text;
+    wrap.appendChild(b);
+    if (data.product) {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `<div class="product-thumb">${data.product.icon}</div><div class="product-info"><strong>${data.product.name}</strong><span class="price">${data.product.price}</span><span class="shop">${data.product.shop}</span></div>`;
+      wrap.appendChild(card);
+    }
+    row.appendChild(wrap);
+    messagesEl.appendChild(row);
+    scrollBottom();
+  }
+  function showTyping() {
+    const row = document.createElement('div');
+    row.className = 'msg-row bot typing';
+    row.id = 'typing';
+    row.innerHTML = '<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+    messagesEl.appendChild(row);
+    scrollBottom();
+  }
+  function removeTyping() {
+    const el = document.getElementById('typing');
+    if (el) el.remove();
+  }
+  function scrollBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+</script>
 </body>
 </html>
